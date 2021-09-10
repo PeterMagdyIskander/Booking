@@ -3,11 +3,14 @@ let users = {
     id: "petermagdy",
     name: "Peter Magdy",
     password: "123456789",
+    owner:false,
   },
   petergeorge: {
     id: "petergeorge",
     name: "Peter George",
     password: "123456789",
+    owner:true,
+    propertyId:["8xf0y6ziyjabvozdd253nf"],
   },
 };
 
@@ -61,11 +64,80 @@ let properties=[
     website: "https://beitelsalam.org/",
   }
 ]
+ 
+let pending=[
+  {
+    userName:'petermagdy',
+    ownerName:'petergeorge',
+    propertyId:"8xf0y6ziyjabvozdd253nf",
+    numberOfCampers:50,
+    ageRange:22,
+    BookedSections:[
+      {
+        sectionsName:'dream',
+        numberOfRoomsBooked:25,
+      },
+      {
+        sectionsName:'3anaber',
+        numberOfRoomsBooked:25,
+      }
+    ],
+    hallsBooked:[
+      {
+        hallName:'Dream Hall 1',
+        hallCapacity:25
+      },
+      {
+        hallName:'Dream Hall 2',
+       hallCapacity:25
+      },
+    ]
 
+
+ },
+ {
+  userName:'abadeer',
+  ownerName:'petergeorge',
+  propertyId:"8xf0y6ziyjabvozdd253nk",
+  numberOfCampers:50,
+  ageRange:22,
+  BookedSections:[
+    {
+      sectionsName:'dream',
+      numberOfRoomsBooked:25,
+    },
+    {
+      sectionsName:'3anaber',
+      numberOfRoomsBooked:25,
+    }
+  ],
+  hallsBooked:[
+    {
+      hallName:'Dream Hall 1',
+      hallCapacity:25
+    },
+    {
+      hallName:'Dream Hall 2',
+     hallCapacity:25
+    },
+  ]
+
+
+},
+]
 
 export function _getUsers() {
   return new Promise((res, rej) => {
     setTimeout(() => res({ ...users }), 1000);
+  });
+}
+
+export function _getPending(ownerName){
+  const notifications = pending.filter(pendingRequest => pendingRequest.ownerName===ownerName)
+  console.log('backend',notifications)
+  return new Promise((res, rej) => {
+    
+    setTimeout(() => res(notifications), 1000);
   });
 }
 

@@ -12,15 +12,16 @@ const SignInPage = (props) => {
   const [doneLoading, setDoneLoading] = useState(false);
   const [users, setUsers] = useState({});
   const [toProperties, settoProperties] = useState(false);
-  useEffect(() => {
-    props.dispatch(showLoading());
+  const {dispatch} =props;
+  useEffect((props) => {
+    dispatch(showLoading());
     getInitialData().then((res) => {
       setUsersKeys(Object.keys(res.users));
       setUsers(res.users);
       setDoneLoading(true);
-      props.dispatch(hideLoading());
+      dispatch(hideLoading());
     });
-  }, []);
+  }, [dispatch]);
   function handleOnSubmit(e) {
     e.preventDefault();
     if (usersKeys.includes(username)) {
@@ -42,8 +43,10 @@ const SignInPage = (props) => {
     e.preventDefault();
     setPassword(e.target.value);
   }
-  if (toProperties === true) {
+  if (toProperties === true&&!users[username].owner) {
     return <Redirect to="/properties" />;
+  }else if(toProperties === true&&users[username].owner){
+    return <Redirect to="/notification" />;
   }
   return (
     <div>

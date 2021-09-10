@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import properties from "../reducers/properties";
 import PropertyCard from "./propertyCard";
 
 const propertiesPage = (props) => {

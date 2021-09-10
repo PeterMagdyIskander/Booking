@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import properties from "./properties";
 import Property from "./property";
 import GetInMenu from "./gettingInMenu";
+import Notification from './notificationPage'
 function App(props) {
   useEffect(() => {
     props.dispatch(handleInitialData());
@@ -23,6 +24,7 @@ function App(props) {
           <Route path="/properties" component={properties} />
           <Route path="/p/:id" component={Property} />
           <Route path="/signUp" component={SignUpPage} />
+          <Route path="/notification" component={Notification} />
         </div>
       </Fragment>
     </Router>
