@@ -1,42 +1,36 @@
 import { useEffect, useState } from "react";
 import { getPendingRequestsForOwner } from "../utils/api";
 import { connect } from "react-redux";
-import { showLoading,hideLoading} from "react-redux-loading-bar"
-
-const Notification =(props)=>{
-const [pendingRequests,setPendingRequests]=useState([])
-const {dispatch,authedUser} =props;
-console.log(authedUser)
-useEffect((props)=>{
-    dispatch(showLoading());
-    getPendingRequestsForOwner(authedUser).then((res)=>{
-        setPendingRequests(res)
+import { showLoading, hideLoading } from "react-redux-loading-bar";
+import NotificationCard from "./notificationCard";
+const Notification = (props) => {
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const { dispatch, authedUser } = props;
+  useEffect(
+    (props) => {
+      dispatch(showLoading());
+      getPendingRequestsForOwner(authedUser).then((res) => {
+        setPendingRequests(res);
         dispatch(hideLoading());
-    })
-},[dispatch,authedUser])
+      });
+    },
+    [dispatch, authedUser]
+  );
 
-
-return(
+  return (
     <div>
-    {console.log('pending',pendingRequests)}
-        {
-            
-            pendingRequests.map((req)=>{
-                return(<div> 
-                    <p> requested from : {req.userName}</p>
-                    <button>view more info</button>
-                </div>)
-            })
-            
-        }
+      <h1> Your Notification </h1>
+      {pendingRequests.map((req) => {
+        return <NotificationCard request={req} key={req.userName} />;
+      })}
     </div>
-)
-}
+  );
+};
 
-function mapStateToProps({authedUser}){
-    return{
-        authedUser:authedUser,
-    }
+function mapStateToProps({ authedUser }) {
+  return {
+    authedUser: authedUser,
+  };
 }
 
 export default connect(mapStateToProps)(Notification);
