@@ -16,6 +16,7 @@ let users = {
 
 let properties=[
   {
+    owner:'petergeorge',
     id: "8xf0y6ziyjabvozdd253nf",
     name: "Beit el salam",
     sections:[

@@ -9,6 +9,8 @@ import properties from "./properties";
 import Property from "./property";
 import GetInMenu from "./gettingInMenu";
 import Notification from './notificationPage'
+import EditDeleteProperty from "./editDeleteProperty";
+
 function App(props) {
   useEffect(() => {
     props.dispatch(handleInitialData());
@@ -25,6 +27,7 @@ function App(props) {
           <Route path="/p/:id" component={Property} />
           <Route path="/signUp" component={SignUpPage} />
           <Route path="/notification" component={Notification} />
+          <Route path="/EditDelete" component={EditDeleteProperty} />
         </div>
       </Fragment>
     </Router>
