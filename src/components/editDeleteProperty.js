@@ -8,11 +8,18 @@ const EditDeleteProperty = (props) => {
   const [nameModalIsOpen, setNameIsOpen] = useState(false);
   const [locationModalIsOpen, setLocationIsOpen] = useState(false);
   const [websiteModalIsOpen, setWebsiteIsOpen] = useState(false);
-  const [sectionModalIsOpen, setSectionIsOpen] = useState(false);
+  const [sectionAddRoomsModalIsOpen, setSectionAddRoomsIsOpen] =
+    useState(false);
+  const [addSectionModalIsOpen, addSectionIsOpen] = useState(false);
+  const [removeSectionModalIsOpen, removeSectionIsOpen] = useState(false);
   const [hallModalIsOpen, setHallIsOpen] = useState(false);
+  const [removeHallModalIsOpen, setremoveHallIsOpen] = useState(false);
   const [place, setPlace] = useState(property.sections[0].sectionName);
+  const [placeModal, setPlaceModal] = useState(
+    property.sections[0].sectionName
+  );
   const [hall, setHall] = useState(property.halls[0].hallName);
-
+  const [hallModal, setHallModal] = useState(property.halls[0].hallName);
   function getIndex(placeName, prop, bool) {
     if (bool) {
       for (let i = 0; i < prop.sections.length; i++) {
@@ -31,8 +38,14 @@ const EditDeleteProperty = (props) => {
   const handlePlaceChange = (e) => {
     setPlace(e.target.value);
   };
+  const handlePlaceModalChange = (e) => {
+    setPlaceModal(e.target.value);
+  };
   const handleHallChange = (e) => {
     setHall(e.target.value);
+  };
+  const handleHallModalChange = (e) => {
+    setHallModal(e.target.value);
   };
   function openModal(target) {
     switch (target) {
@@ -45,11 +58,23 @@ const EditDeleteProperty = (props) => {
       case "website":
         setWebsiteIsOpen(true);
         break;
-      case "section":
-        setSectionIsOpen(true);
+      case "sectionAddRooms":
+        setSectionAddRoomsIsOpen(true);
+        break;
+      case "addSection":
+        addSectionIsOpen(true);
+        break;
+      case "removeSection":
+        removeSectionIsOpen(true);
+
         break;
       case "hall":
         setHallIsOpen(true);
+        break;
+      case "removeHall":
+        setremoveHallIsOpen(true);
+        break;
+      default:
         break;
     }
   }
@@ -64,18 +89,34 @@ const EditDeleteProperty = (props) => {
       case "website":
         setWebsiteIsOpen(false);
         break;
-      case "section":
-        setSectionIsOpen(false);
+      case "sectionAddRooms":
+        setSectionAddRoomsIsOpen(false);
+        break;
+      case "addSection":
+        addSectionIsOpen(false);
+        break;
+      case "removeSection":
+        removeSectionIsOpen(false);
         break;
       case "hall":
         setHallIsOpen(false);
+        break;
+      case "removeHall":
+        setremoveHallIsOpen(false);
+        break;
+      default:
+        break;
     }
   }
   let prop = property;
+  let newSection = {
+    sectionName: "",
+    sectionsRooms: [],
+  };
   let newRooms = {
     roomName: " ",
-   capacity:0,
-   numberOfRooms:0
+    capacity: 0,
+    numberOfRooms: 0,
   };
   let newHall = {
     hallName: " ",
@@ -98,6 +139,14 @@ const EditDeleteProperty = (props) => {
           }}
         >
           Done
+        </button>
+        <button
+          onClick={() => {
+            closeModal("name");
+          }}
+        >
+          {" "}
+          close{" "}
         </button>
       </Modal>
 
@@ -122,6 +171,14 @@ const EditDeleteProperty = (props) => {
         >
           Done
         </button>
+        <button
+          onClick={() => {
+            closeModal("location");
+          }}
+        >
+          {" "}
+          close{" "}
+        </button>
       </Modal>
 
       <p>{property.website}</p>
@@ -145,13 +202,54 @@ const EditDeleteProperty = (props) => {
         >
           Done
         </button>
+        <button
+          onClick={() => {
+            closeModal("website");
+          }}
+        >
+          {" "}
+          close{" "}
+        </button>
       </Modal>
 
       <p> sections </p>
-      <button onClick={() => openModal("section")}> Edit Section </button>
+      <button  onClick={() => openModal("addSection")}> add a section </button>
       <Modal
-        isOpen={sectionModalIsOpen}
-        onRequestClose={() => closeModal("section")}
+        isOpen={addSectionModalIsOpen}
+        onRequestClose={() => closeModal("addSection")}
+      >
+        <input
+          placeholder="section name"
+          onChange={(e) => {
+            newSection.sectionName = e.target.value;
+            newSection.sectionsRooms = [];
+          }}
+        />
+        <button
+          onClick={() => {
+            prop.sections.push(newSection);
+            setProperty(prop);
+            closeModal("addSection");
+          }}
+        >
+          done
+        </button>
+        <button
+          onClick={() => {
+            closeModal("addSection");
+          }}
+        >
+          {" "}
+          close{" "}
+        </button>
+      </Modal>
+      <button onClick={() => openModal("sectionAddRooms")}>
+        {" "}
+        Add Rooms to {place}
+      </button>
+      <Modal
+        isOpen={sectionAddRoomsModalIsOpen}
+        onRequestClose={() => closeModal("sectionAddRooms")}
       >
         <input
           placeholder="room name"
@@ -181,14 +279,59 @@ const EditDeleteProperty = (props) => {
               newRooms
             );
             setProperty(prop);
-            closeModal("section");
+            closeModal("sectionAddRooms");
           }}
         >
           Done
         </button>
+        <button
+          onClick={() => {
+            closeModal("sectionAddRooms");
+          }}
+        >
+          {" "}
+          close{" "}
+        </button>
       </Modal>
 
-      <button> Remove Section </button>
+      <button disabled={property.sections.length<=1} onClick={() => openModal("removeSection")}>
+        {" "}
+        Remove Section{" "}
+      </button>
+      <Modal
+        isOpen={removeSectionModalIsOpen}
+        onRequestClose={() => closeModal("removeSection")}
+      >
+        <select value={placeModal} onChange={handlePlaceModalChange}>
+          {property.sections.map((section) => {
+            return (
+              <option key={section.sectionName} value={section.sectionName}>
+                {section.sectionName}{" "}
+              </option>
+            );
+          })}
+        </select>
+
+        <br />
+        <button
+          onClick={() => {
+            prop.sections.splice(getIndex(placeModal, prop, true), 1);
+            setProperty(prop);
+            closeModal("removeSection");
+          }}
+        >
+          Done
+        </button>
+        <button
+          onClick={() => {
+            closeModal("removeSection");
+          }}
+        >
+          {" "}
+          close{" "}
+        </button>
+      </Modal>
+
       <br />
       <select value={place} onChange={handlePlaceChange}>
         {property.sections.map((section) => {
@@ -230,8 +373,49 @@ const EditDeleteProperty = (props) => {
         >
           Done
         </button>
+        <button
+          onClick={() => {
+            closeModal("hall");
+          }}
+        >
+          {" "}
+          close{" "}
+        </button>
       </Modal>
-      <button> Remove hall </button>
+      <button disabled={property.halls.length<=1} onClick={() => openModal("removeHall")}> Remove Hall </button>
+      <Modal
+        isOpen={removeHallModalIsOpen}
+        onRequestClose={() => closeModal("removeHall")}
+      >
+        <select value={hallModal} onChange={handleHallModalChange}>
+          {property.halls.map((hall) => {
+            return (
+              <option key={hall.hallName} value={hall.hallName}>
+                {hall.hallName}{" "}
+              </option>
+            );
+          })}
+        </select>
+
+        <br />
+        <button
+          onClick={() => {
+            prop.halls.splice(getIndex(hallModal, prop, false), 1);
+            setProperty(prop);
+            closeModal("removeHall");
+          }}
+        >
+          Done
+        </button>
+        <button
+          onClick={() => {
+            closeModal("removeHall");
+          }}
+        >
+          {" "}
+          close{" "}
+        </button>
+      </Modal>
       <br />
       <select value={hall} onChange={handleHallChange}>
         {property.halls.map((hall) => {
@@ -245,6 +429,8 @@ const EditDeleteProperty = (props) => {
       <p>
         capacity {property.halls[getIndex(hall, property, false)].hallCapacity}
       </p>
+      <button> Apply changes </button>
+      <button> delete this property </button>
     </div>
   );
 };
