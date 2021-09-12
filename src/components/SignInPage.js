@@ -13,6 +13,7 @@ const SignInPage = (props) => {
   const [users, setUsers] = useState({});
   const [toProperties, settoProperties] = useState(false);
   const {dispatch} =props;
+  
   useEffect((props) => {
     dispatch(showLoading());
     getInitialData().then((res) => {
@@ -26,7 +27,7 @@ const SignInPage = (props) => {
     e.preventDefault();
     if (usersKeys.includes(username)) {
       if (password === users[username].password) {
-        props.dispatch(setAuthedUser(username));
+        props.dispatch(setAuthedUser(users[username]));
         settoProperties(true);
       } else {
         alert("invalid password");

@@ -4,7 +4,7 @@ import PropertyCard from "./propertyCard";
 const propertiesPage = (props) => {
   return (
     <div>
-      <h1>all properties authedUser:{props.authedUser}</h1>
+      <h1>all properties authedUser:{props.authedUser.id}</h1>
       <ol>
         {props.propertyKeys.map((propertyKey) => (
           <li key={props.properties[propertyKey].id}>
@@ -17,7 +17,7 @@ const propertiesPage = (props) => {
 };
 
 function mapStateToProps({ properties, authedUser }) {
-  console.log("hi",properties);
+  console.log("hi",authedUser);
   const propertyKeys=Object.keys(properties);
   return {
     propertyKeys,

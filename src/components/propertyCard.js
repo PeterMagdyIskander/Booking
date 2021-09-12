@@ -3,7 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 
 const PropertyCard = (props) => {
   return (
-    <Link to={`/p/${props.id}`}>
+    <Link to={`/properties/${props.id}`}>
       <div>
         <h1>{props.properties[props.propertyKey].name}</h1>
         <button>view more info</button>

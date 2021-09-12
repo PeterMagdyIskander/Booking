@@ -12,7 +12,7 @@ const Notification = (props) => {
   useEffect(
     (props) => {
       dispatch(showLoading());
-      getPendingRequestsForOwner(authedUser).then((res) => {
+      getPendingRequestsForOwner(authedUser.id).then((res) => {
         setPendingRequests(res);
         dispatch(hideLoading());
       });

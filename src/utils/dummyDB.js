@@ -10,7 +10,7 @@ let users = {
     name: "Peter George",
     password: "123456789",
     owner:true,
-    propertyId:["8xf0y6ziyjabvozdd253nf"],
+    propertyIds:["8xf0y6ziyjabvozdd253nf"],
   },
 };
 

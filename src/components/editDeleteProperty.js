@@ -213,7 +213,7 @@ const EditDeleteProperty = (props) => {
       </Modal>
 
       <p> sections </p>
-      <button  onClick={() => openModal("addSection")}> add a section </button>
+      <button onClick={() => openModal("addSection")}> add a section </button>
       <Modal
         isOpen={addSectionModalIsOpen}
         onRequestClose={() => closeModal("addSection")}
@@ -294,7 +294,10 @@ const EditDeleteProperty = (props) => {
         </button>
       </Modal>
 
-      <button disabled={property.sections.length<=1} onClick={() => openModal("removeSection")}>
+      <button
+        disabled={property.sections.length <= 1}
+        onClick={() => openModal("removeSection")}
+      >
         {" "}
         Remove Section{" "}
       </button>
@@ -315,9 +318,13 @@ const EditDeleteProperty = (props) => {
         <br />
         <button
           onClick={() => {
-            prop.sections.splice(getIndex(placeModal, prop, true), 1);
+            let index = getIndex(placeModal, prop, true);
+            prop.sections.splice(index, 1);
             setProperty(prop);
-            closeModal("removeSection");
+            if (index === 0) {
+              setPlace(property.sections[0].sectionName);
+              setPlaceModal(property.sections[0].sectionName);
+            }
           }}
         >
           Done
@@ -382,7 +389,13 @@ const EditDeleteProperty = (props) => {
           close{" "}
         </button>
       </Modal>
-      <button disabled={property.halls.length<=1} onClick={() => openModal("removeHall")}> Remove Hall </button>
+      <button
+        disabled={property.halls.length <= 1}
+        onClick={() => openModal("removeHall")}
+      >
+        {" "}
+        Remove Hall{" "}
+      </button>
       <Modal
         isOpen={removeHallModalIsOpen}
         onRequestClose={() => closeModal("removeHall")}
@@ -400,8 +413,14 @@ const EditDeleteProperty = (props) => {
         <br />
         <button
           onClick={() => {
-            prop.halls.splice(getIndex(hallModal, prop, false), 1);
+            let index = getIndex(hallModal, prop, false);
+            prop.halls.splice(index, 1);
+
             setProperty(prop);
+            if (index === 0) {
+              setHall(property.halls[0].hallName);
+              setHallModal(property.halls[0].hallName);
+            }
             closeModal("removeHall");
           }}
         >
@@ -438,7 +457,7 @@ const EditDeleteProperty = (props) => {
 function mapStateToProps({ properties, authedUser }) {
   const ids = Object.keys(properties);
   for (let i = 0; i < ids.length; i++) {
-    if (properties[i].owner === authedUser) {
+    if (properties[i].owner === authedUser.id) {
       var property = properties[i];
       break;
     }
