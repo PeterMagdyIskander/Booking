@@ -14,6 +14,7 @@ import OwnerNavbar from "./ownerNavbar";
 import UserNavbar from "./userNavbar";
 import EditDeletePage from "./editDeletePage";
 import AddProperty from "./addPropertyPage";
+import PrivateRoute from "./PrivateRoute";
 function App(props) {
   
   useEffect(() => {
@@ -32,13 +33,13 @@ function App(props) {
         }
           <Route path="/" exact component={GetInMenu} />
           <Route path="/signIn" component={SignInPage} />
-          <Route path="/properties" component={properties} />
-          <Route path="/properties/:id" component={Property} />
-          <Route path="/signUp" component={SignUpPage} />
-          <Route path="/notification" component={Notification} />
-          <Route path="/EditDelete" component={EditDeletePage} />
-          <Route path="/AddProperty" component={AddProperty} />
-          <Route path="/EditDeleteProperty/:id" component={EditDeleteProperty} />
+          <Route  path="/properties" component={properties} />
+          <Route  path="/properties/:id" component={Property} />
+          <Route  path="/signUp" component={SignUpPage} />
+          <PrivateRoute isAuthenticated={props.authedUser} path="/notification" component={Notification} />
+          <PrivateRoute isAuthenticated={props.authedUser} path="/EditDelete" component={EditDeletePage} />
+          <PrivateRoute isAuthenticated={props.authedUser} path="/AddProperty" component={AddProperty} />
+          <PrivateRoute isAuthenticated={props.authedUser} path="/EditDeleteProperty/:id" component={EditDeleteProperty} />
         </div>
       </Fragment>
     </Router>

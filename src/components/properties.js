@@ -4,7 +4,7 @@ import PropertyCard from "./propertyCard";
 const propertiesPage = (props) => {
   return (
     <div>
-      <h1>all properties authedUser:{props.authedUser.id}</h1>
+      <h1>all properties</h1>
       <ol>
         {props.propertyKeys.map((propertyKey) => (
           <li key={props.properties[propertyKey].id}>
