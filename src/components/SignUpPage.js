@@ -23,7 +23,6 @@ import { useState } from "react";
             <input type="radio" value="User" name='ownerBoolean'
               onChange={handleChange} />
             <label htmlFor="User">User</label>
-            <p>You are {ownerBoolean.toString()}</p>
          </form>
         </div>
     )

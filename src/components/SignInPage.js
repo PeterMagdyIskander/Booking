@@ -1,40 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { getInitialData } from "../utils/api";
+import React, { useState } from "react";
+import { signIn } from "../utils/api";
 import { connect } from "react-redux";
 import { setAuthedUser } from "../actions/authedUser";
 import { Redirect } from "react-router";
-import { showLoading,hideLoading, LoadingBar } from "react-redux-loading-bar"
+import { showLoading, hideLoading} from "react-redux-loading-bar";
 
 const SignInPage = (props) => {
+  const { dispatch } = props;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [usersKeys, setUsersKeys] = useState([]);
-  const [doneLoading, setDoneLoading] = useState(false);
-  const [users, setUsers] = useState({});
-  const [toProperties, settoProperties] = useState(false);
-  const {dispatch} =props;
-  
-  useEffect((props) => {
-    dispatch(showLoading());
-    getInitialData().then((res) => {
-      setUsersKeys(Object.keys(res.users));
-      setUsers(res.users);
-      setDoneLoading(true);
-      dispatch(hideLoading());
-    });
-  }, [dispatch]);
-  function handleOnSubmit(e) {
+  const [owner, setOwner] = useState("");
+  const [signedIn, setSignedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (usersKeys.includes(username)) {
-      if (password === users[username].password) {
-        props.dispatch(setAuthedUser(users[username]));
-        settoProperties(true);
-      } else {
-        alert("invalid password");
-      }
+    setLoading(true);
+    dispatch(showLoading());
+    const user = await signIn(username, password);
+    if (user !== null) {
+      dispatch(setAuthedUser(user));
+      setOwner(user.owner);
+      setSignedIn(true);
     } else {
-      alert("user not found");
+      alert("Username or Password is incorrect");
+
+      setLoading(false);
     }
+    dispatch(hideLoading());
   }
   function handleOnChangeUsername(e) {
     e.preventDefault();
@@ -44,15 +37,16 @@ const SignInPage = (props) => {
     e.preventDefault();
     setPassword(e.target.value);
   }
-  if (toProperties === true&&!users[username].owner) {
-    return <Redirect to="/properties" />;
-  }else if(toProperties === true&&users[username].owner){
+
+  if (signedIn && owner) {
     return <Redirect to="/notification" />;
+  } else if (signedIn && !owner) {
+    return <Redirect to="/properties" />;
   }
+
   return (
     <div>
-    <LoadingBar />
-      <form onSubmit={handleOnSubmit}>
+      <form>
         <input
           placeholder="Enter your username please"
           onChange={handleOnChangeUsername}
@@ -62,12 +56,12 @@ const SignInPage = (props) => {
           type="password"
           onChange={handleOnChangePassword}
         />
-        <button disabled={!doneLoading} onSubmit={handleOnSubmit}>SignIn</button>
+        <button disabled={loading} onClick={handleSubmit}>
+          SignIn
+        </button>
       </form>
     </div>
   );
 };
-
-
 
 export default connect()(SignInPage);

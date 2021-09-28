@@ -1,0 +1,89 @@
+const propertiesSchema = [
+  {
+    ownerName: "",
+    propertyId: "",
+    propertyName: "",
+    sections: [
+      {
+        sectionName: "",
+        sectionsRooms: [
+          {
+            roomType: "",
+            capacityOfRoom: 0,
+            numberOfThisTypeOfRooms: 0,
+          },
+        ],
+      },
+    ],
+    halls: [
+      {
+        hallName: "",
+        hallCapacity: 0,
+      },
+    ],
+    Location: "",
+    website: "",
+    reservation: [
+      {
+        accepted: false,
+        username: "",
+        numberOfCampers: 0,
+        ageRangeMin: 0,
+        ageRangeMax: 0,
+        from: "",
+        to: "",
+        BookedSections: [
+          {
+            sectionsName: "",
+            numberOfRoomsBookedInSection: 0,
+          },
+        ],
+        hallsBooked: [""],
+      },
+    ],
+  },
+];
+
+const pendingPropertiesForAcceptenceSchema = [
+  {
+    accepted: false,
+    ownerName: "",
+    propertyId: "",
+    propertyName: "",
+    sections: [
+      {
+        sectionName: "",
+        sectionsRooms: [
+          {
+            roomType: "",
+            capacityOfRoom: 0,
+            numberOfThisTypeOfRooms: 0,
+          },
+        ],
+      },
+    ],
+    halls: [
+      {
+        hallName: "",
+        hallCapacity: 0,
+      },
+    ],
+    location: "",
+    website: "",
+    reservation: [],
+  },
+];
+
+const userSchema = [
+  {
+    username: "",
+    userPassword: "",
+    userEmail: "",
+    userFirstname: "",
+    userLastname: "",
+    userDOB: "",
+    userPhoneNumber: "",
+    owner: false,
+    propertyIds: [""],
+  },
+];

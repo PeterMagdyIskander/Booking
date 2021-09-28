@@ -1,10 +1,14 @@
 import { useState } from "react";
 import Modal from "react-modal";
-const AddProperty = () => {
+import { connect } from "react-redux";
+import { AddProperty } from "../utils/api";
+const AddPropertyPage = (props) => {
   Modal.setAppElement("#root");
+  const {authedUser}=props;
+  const id=generatePropertyID();
   let propertyBlueprint = {
-    owner: "",
-    id: "",
+    owner: authedUser.id,
+    id: id,
     name: "",
     sections: [],
     halls: [],
@@ -67,6 +71,17 @@ const AddProperty = () => {
         break;
       default:
         break;
+    }
+  }
+
+  function generatePropertyID () {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+  }
+
+  async function sendToApi(property){
+    let res=await AddProperty(property);
+    if(res){
+      alert('success')
     }
   }
 
@@ -251,8 +266,14 @@ const AddProperty = () => {
       </Modal>
 
       <br/>
-    <button onClick={()=>{console.log('final',property)}}>send for revision</button>
+    <button onClick={()=>{sendToApi(property)}}>Add Property</button>
     </div>
   );
 };
-export default AddProperty;
+
+function mapStateToProps({authedUser}){
+  return{
+    authedUser,
+  }
+}
+export default connect(mapStateToProps)(AddPropertyPage);

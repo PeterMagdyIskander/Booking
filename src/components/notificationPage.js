@@ -12,10 +12,11 @@ const Notification = (props) => {
       dispatch(showLoading());
       getPendingRequestsForOwner(authedUser.id).then((res) => {
         setPendingRequests(res);
+        console.log('pending requests', pendingRequests);
         dispatch(hideLoading());
       });
     },
-    [dispatch,authedUser]
+    [dispatch,authedUser,pendingRequests]
   );
 
   return (

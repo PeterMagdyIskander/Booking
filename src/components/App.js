@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment,useState ,useEffect } from "react";
 import SignInPage from "./SignInPage";
 import SignUpPage from "./SignUpPage";
 import { connect } from "react-redux";
@@ -15,27 +15,38 @@ import UserNavbar from "./userNavbar";
 import EditDeletePage from "./editDeletePage";
 import AddProperty from "./addPropertyPage";
 import PrivateRoute from "./PrivateRoute";
+import db from "../utils/firebaseDB";
+import Signup from "./signUp";
 function App(props) {
-  
+  const [info , setInfo] = useState([]);
   useEffect(() => {
     props.dispatch(handleInitialData());
   });
-
-
-
+  const Fetchdata = ()=>{
+    db.collection("Properties").get().then((querySnapshot) => {
+      querySnapshot.forEach(element => {
+        var data = element.data();
+        setInfo(arr => [...arr , data]);
+    });
+    })
+}
+window.addEventListener('load', () => {
+  Fetchdata();
+});
+console.log('firebase data',info)
   return (
     <Router>
     <LoadingBar />
       <Fragment>
         <div>
         {
-          props.authedUser==null ? <p> welcome to our website </p> : props.authedUser.owner ? <OwnerNavbar /> : <UserNavbar />
+          props.authedUser==null ? <p> [OUR LOGO] Happy Booking </p> : props.authedUser.owner ? <OwnerNavbar /> : <UserNavbar />
         }
           <Route path="/" exact component={GetInMenu} />
           <Route path="/signIn" component={SignInPage} />
           <Route  path="/properties" component={properties} />
-          <Route  path="/properties/:id" component={Property} />
-          <Route  path="/signUp" component={SignUpPage} />
+          <Route  path="/property/:id" component={Property} />
+          <Route  path="/signUp" component={Signup} />
           <PrivateRoute isAuthenticated={props.authedUser} path="/notification" component={Notification} />
           <PrivateRoute isAuthenticated={props.authedUser} path="/EditDelete" component={EditDeletePage} />
           <PrivateRoute isAuthenticated={props.authedUser} path="/AddProperty" component={AddProperty} />

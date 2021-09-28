@@ -1,15 +1,18 @@
-import { _getProperties, _getUsers,_getPending } from "../utils/dummyDB";
+import { _getProperties,_getPending,_signIn, _addProperty } from "../utils/dummyDB";
 
-export function getInitialData() {
-  return Promise.all([_getUsers(), _getProperties()]).then(
-    ([users, properties]) => ({
-      users,
-      properties,
-    })
-  );
+export function getProperties() {
+  return _getProperties();
 }
 
 export function getPendingRequestsForOwner(ownerName){
   return _getPending(ownerName)
   
+}
+
+export function signIn(username,password){
+  return _signIn(username,password)
+}
+
+export function AddProperty(property){
+  return _addProperty(property);
 }
