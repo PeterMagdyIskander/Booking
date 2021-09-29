@@ -1,5 +1,22 @@
 import { NavLink } from "react-router-dom";
-const OwnerNavbar = () => {
+import firebase from "firebase";
+import { setAuthedUser } from "../actions/authedUser";
+import { connect } from "react-redux";
+const OwnerNavbar = (props) => {
+  const {dispatch}=props;
+  const signOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(function () {
+        console.log("Successufully Signed out");
+        dispatch(setAuthedUser(null));
+      })
+      .catch(function () {
+        console.log("Error Signed out");
+      });
+    
+  };
   return (
     <div>
       <nav>
@@ -18,9 +35,12 @@ const OwnerNavbar = () => {
           <li>
             <NavLink to="/AddProperty">Add Property</NavLink>
           </li>
+          <li>
+          <NavLink to="/" onClick={signOut}>Sign out</NavLink>
+          </li>
         </ul>
       </nav>
     </div>
   );
 };
-export default OwnerNavbar;
+export default connect()(OwnerNavbar);
