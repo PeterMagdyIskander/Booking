@@ -1,29 +1,39 @@
 import { useEffect, useState } from "react";
-import { getPendingRequestsForOwner } from "../utils/api";
 import { connect } from "react-redux";
-import { showLoading, hideLoading } from "react-redux-loading-bar";
 import NotificationCard from "./notificationCard";
-
+import db from "../utils/firebaseDB";
 const Notification = (props) => {
-  const [pendingRequests, setPendingRequests] = useState([]);
-  const { dispatch, authedUser } = props;
-  useEffect(
-    (props) => {
-      dispatch(showLoading());
-      getPendingRequestsForOwner(authedUser.id).then((res) => {
-        setPendingRequests(res);
-        console.log('pending requests', pendingRequests);
-        dispatch(hideLoading());
-      });
-    },
-    [dispatch,authedUser,pendingRequests]
-  );
+  const [allReservations, setAllReservations] = useState([]);
+  const { authedUser } = props;
 
+  const getAllReservationInAProperty = (ids) => {
+    ids.map((id) => {
+      return db.collection("Reservations")
+      .doc(id)
+      .get()
+      .then((snapshot) => {
+        let data = snapshot.data();
+        setAllReservations((arr) => [...arr, data]);
+      });
+    });
+  };
+  useEffect(() => {
+    authedUser.propertyIds.map((id) => {
+      return db.collection("Properties")
+        .doc(id)
+        .get()
+        .then((snapshot) => {
+          let data = snapshot.data();
+          getAllReservationInAProperty(data.reservations);
+        });
+    });
+  }, [authedUser.propertyIds]);
+  console.log(allReservations);
   return (
     <div>
       <h1> Your Notification </h1>
-      {pendingRequests.map((req) => {
-        return <NotificationCard request={req} key={req.userName} />;
+      {allReservations.map((req) => {
+        return <NotificationCard request={req} key={req.username} />;
       })}
     </div>
   );
@@ -35,4 +45,4 @@ function mapStateToProps({ authedUser }) {
   };
 }
 
-export default connect(mapStateToProps)(Notification)
+export default connect(mapStateToProps)(Notification);

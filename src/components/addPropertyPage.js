@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "react-modal";
 import { connect } from "react-redux";
-import { AddProperty } from "../utils/api";
+import db from '../utils/firebaseDB'
 const AddPropertyPage = (props) => {
   Modal.setAppElement("#root");
   const {authedUser}=props;
@@ -19,8 +19,7 @@ const AddPropertyPage = (props) => {
   const [propertyName, setPropertyName] = useState("");
   const [propertyLocation, setPropertyLocation] = useState("");
   const [propertyWebsite, setPropertyWebsite] = useState("");
-  const [sectionAddRoomsModalIsOpen, setSectionAddRoomsIsOpen] =
-    useState(false);
+  const [sectionAddRoomsModalIsOpen, setSectionAddRoomsIsOpen] = useState(false);
   const [addSectionModalIsOpen, addSectionIsOpen] = useState(false);
   const [place, setPlace] = useState("please add a section");
   const [placeModal, setPlaceModal] = useState(place);
@@ -79,10 +78,7 @@ const AddPropertyPage = (props) => {
   }
 
   async function sendToApi(property){
-    let res=await AddProperty(property);
-    if(res){
-      alert('success')
-    }
+    db.collection('Properties').doc(generatePropertyID()).set(property);
   }
 
   let prop = property;

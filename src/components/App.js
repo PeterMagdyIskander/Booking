@@ -1,6 +1,5 @@
 import React, { Fragment,useState ,useEffect } from "react";
 import { connect } from "react-redux";
-import { handleInitialData } from "../actions/shared";
 import  LoadingBar  from "react-redux-loading-bar";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import properties from "./properties";
@@ -14,11 +13,13 @@ import PrivateRoute from "./PrivateRoute";
 import db from "../utils/firebaseDB";
 import Signup from "./signUp";
 import Navbar from "./navBar";
+import { receiveProperties } from "../actions/properties";
 
 function App(props) {
   const [info , setInfo] = useState([]);
+
   useEffect(() => {
-    props.dispatch(handleInitialData());
+    props.dispatch(receiveProperties(info));
   });
 
 

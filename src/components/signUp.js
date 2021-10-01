@@ -28,6 +28,7 @@ var uiConfig = {
 
 
 
+
 const Signup = (props) => {
   
   const { dispatch } = props;
@@ -35,7 +36,26 @@ const Signup = (props) => {
   const [user, setUser] = useState(null);
   const [found,setFound]=useState(null);
 
-  useEffect(() => {
+  useEffect(()=>  {
+    const checkIfExists = (user) => {
+      if(user){
+        db.collection("Users")
+        .doc(user.uid)
+        .get()
+        .then((snapshot) => {
+          setFound(snapshot.data());
+          if(snapshot.exists){
+            dispatch(setAuthedUser(snapshot.data()));
+          }else{
+            dispatch(setAuthedUser(null));
+          }
+          
+        });
+      }
+    };
+    
+
+
     const authObserver = firebase.auth().onAuthStateChanged((user) => {
       setUser(user);
     })
@@ -44,24 +64,6 @@ const Signup = (props) => {
   },[dispatch,user]);
 
 
-  const checkIfExists = (user) => {
-    if(user){
-      db.collection("Users")
-      .doc(user.uid)
-      .get()
-      .then((snapshot) => {
-        setFound(snapshot.data());
-        if(snapshot.exists){
-          dispatch(setAuthedUser(snapshot.data()));
-        }else{
-          dispatch(setAuthedUser(null));
-        }
-        
-      });
-    }
-  };
-
-  
 
   if (user) {
     if(found) {

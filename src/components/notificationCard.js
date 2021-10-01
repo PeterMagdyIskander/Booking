@@ -11,7 +11,7 @@ const NotificationCard = (props) => {
   }
   return (
     <div>
-      <p>{props.request.userName}</p>
+      <p>{props.request.username}</p>
       <button onClick={openModal}>View more info</button>
       <NotificationModal
         modalIsOpen={modalIsOpen}
