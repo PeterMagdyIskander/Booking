@@ -13,6 +13,7 @@ import PrivateRoute from "./PrivateRoute";
 import db from "../utils/firebaseDB";
 import Signup from "./signUp";
 import Navbar from "./navBar";
+import Reservations from "./Reservations";
 import { receiveProperties } from "../actions/properties";
 
 function App(props) {
@@ -53,7 +54,7 @@ console.log('firebase data',info)
           <PrivateRoute isAuthenticated={props.authedUser} path="/EditDelete" component={EditDeletePage} />
           <PrivateRoute isAuthenticated={props.authedUser} path="/AddProperty" component={AddProperty} />
           <PrivateRoute isAuthenticated={props.authedUser} path="/EditDeleteProperty/:id" component={EditDeleteProperty} />
-
+          <PrivateRoute isAuthenticated={props.authedUser} path="/Reservations" component={Reservations} />
           
         </div>
       </Fragment>

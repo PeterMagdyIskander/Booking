@@ -16,6 +16,7 @@ const FillOutPage = (props) => {
     phoneNumber:phoneNumber,
     isOwner:ownerBoolean,
     id:props.uid,
+    propertyIds:[]
   }
   const handleChange = () => {
     setOwnerBoolean(!ownerBoolean);

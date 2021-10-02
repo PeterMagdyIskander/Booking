@@ -14,6 +14,7 @@ const AddPropertyPage = (props) => {
     halls: [],
     Location: "",
     website: "",
+    reservations:[]
   };
   const [property, setProperty] = useState(propertyBlueprint);
   const [propertyName, setPropertyName] = useState("");
@@ -78,16 +79,15 @@ const AddPropertyPage = (props) => {
   }
 
   async function sendToApi(property){
-    let newPropertyId=generatePropertyID();
-    db.collection('Properties').doc(newPropertyId).set(property);
-    let newPropertyIds=[...authedUser.propertyIds,newPropertyId]
+    db.collection('Properties').doc(id).set(property);
+    let newPropertyIds=[...authedUser.propertyIds,id]
     db.collection('Users').doc(authedUser.id).update({propertyIds:newPropertyIds});
   }
 
   let prop = property;
   let newSection = {
     sectionName: "",
-    sectionsRooms: [],
+    sectionRooms: [],
   };
   let newRooms = {
     roomName: " ",

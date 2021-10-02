@@ -36,8 +36,12 @@ const OwnerNavbar = (props) => {
             <NavLink to="/AddProperty">Add Property</NavLink>
           </li>
           <li>
+          <NavLink to="/Reservations" >Reservations</NavLink>
+          </li>
+          <li>
           <NavLink to="/" onClick={signOut}>Sign out</NavLink>
           </li>
+          
         </ul>
       </nav>
     </div>
