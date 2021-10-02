@@ -51,7 +51,7 @@ const Property = (props) => {
       </select>
       <Rooms
         sectionRooms={
-          props.prop.sections[getIndex(place, props.prop, true)].sectionsRooms
+          props.prop.sections[getIndex(place, props.prop, true)].sectionRooms
         }
       />
 

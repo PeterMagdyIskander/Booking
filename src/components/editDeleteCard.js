@@ -1,30 +1,30 @@
+import { useState,useEffect } from "react";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
-
+import db from "../utils/firebaseDB";
 const EditDeleteCard = (props) => {
+  const {id}=props;
+  const [property,setProperty]=useState({});
+  console.log('id',id)
+  useEffect(() => {
+     db.collection("Properties")
+        .doc(id)
+        .get()
+        .then((snapshot) => {
+          let data = snapshot.data();
+          setProperty(data);
+        });
+  },[id]);
+
+  console.log('this property',property)
   return (
-    <Link to={`/EditDeleteProperty/${props.id}`}>
+    <Link to={`/EditDeleteProperty/${id}`}>
       <div>
-        <h1>{props.properties[props.propertyKey].name}</h1>
+        <h1>{property.name}</h1>
         <button>Edit Property</button>
       </div>
     </Link>
   );
 };
 
-function mapStateToProps({ properties }, {id }) {
-    const propertiesKeys=Object.keys(properties);
-    for(let i=0;i<propertiesKeys.length;i++){
-        if(properties[i].id===id){
-            var propertyKey=i;
-            break;
-        }
-    }
-  return {
-    propertyKey,
-    id,
-    properties,
-  };
-}
-
-export default withRouter(connect(mapStateToProps)(EditDeleteCard));
+export default withRouter(connect()(EditDeleteCard));

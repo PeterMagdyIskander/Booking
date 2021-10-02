@@ -1,7 +1,4 @@
 
-
-
-
 const Rooms =(props)=>{
     return(
         <table>
@@ -16,7 +13,7 @@ const Rooms =(props)=>{
                     return <tr key={sectionRoom.roomName}>
                         <th>{sectionRoom.roomName}</th>
                         <th>{sectionRoom.numberOfRooms}</th>
-                        <th>{sectionRoom.capacity}</th>
+                        <th>{sectionRoom.roomCapacity}</th>
                     </tr>
                 })
             }

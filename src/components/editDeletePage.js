@@ -16,12 +16,10 @@ const EditDeletePage = (props) => {
   );
 };
 
-function mapStateToProps({ properties, authedUser }) {
+function mapStateToProps({authedUser }) {
   const propertyIds=authedUser.propertyIds;
   return {
     propertyIds,
-    properties,
-    authedUser,
   };
 }
 

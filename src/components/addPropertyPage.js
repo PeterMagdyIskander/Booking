@@ -78,7 +78,10 @@ const AddPropertyPage = (props) => {
   }
 
   async function sendToApi(property){
-    db.collection('Properties').doc(generatePropertyID()).set(property);
+    let newPropertyId=generatePropertyID();
+    db.collection('Properties').doc(newPropertyId).set(property);
+    let newPropertyIds=[...authedUser.propertyIds,newPropertyId]
+    db.collection('Users').doc(authedUser.id).update({propertyIds:newPropertyIds});
   }
 
   let prop = property;
