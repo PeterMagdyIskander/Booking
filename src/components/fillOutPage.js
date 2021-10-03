@@ -2,15 +2,15 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { setAuthedUser } from "../actions/authedUser";
-import { Redirect } from "react-router";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
 import db from "../utils/firebaseDB";
+import { Redirect } from "react-router";
 
 const FillOutPage = (props) => {
   const { dispatch } = props;
   const [ownerBoolean, setOwnerBoolean] = useState(false);
   const [phoneNumber,setphoneNumber]=useState('0-10-xxxx-xxxx')
-
+  const [redirect,setRedirect]=useState(false);
   let newUser={
     firstName:props.firstName,
     phoneNumber:phoneNumber,
@@ -31,7 +31,10 @@ const FillOutPage = (props) => {
     dispatch(showLoading());
     dispatch(setAuthedUser(newUser));
     dispatch(hideLoading());
-    return <Redirect to='/properties' />
+    setRedirect(true);
+  }
+  if(redirect){
+    return <Redirect to='properties' />
   }
   return (
     <div>
@@ -62,7 +65,8 @@ const FillOutPage = (props) => {
       </div>
     
     
-    <button onClick={submitForm}> Start Browsing!</button>
+    <button to='/properties' onClick={submitForm}> Start Browsing!</button>
+
     </form>
       <p>{JSON.stringify(newUser)}</p>
       <p>{props.uid}</p>

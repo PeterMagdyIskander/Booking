@@ -13,7 +13,7 @@ const Rooms =(props)=>{
                     return <tr key={sectionRoom.roomName}>
                         <th>{sectionRoom.roomName}</th>
                         <th>{sectionRoom.numberOfRooms}</th>
-                        <th>{sectionRoom.roomCapacity}</th>
+                        <th>{sectionRoom.capacity}</th>
                     </tr>
                 })
             }

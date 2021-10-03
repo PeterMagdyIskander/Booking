@@ -152,7 +152,7 @@ const EditDeleteProperty = (props) => {
   let prop = property;
   let newSection = {
     sectionName: "",
-    sectionsRooms: [],
+    sectionRoom: [],
   };
   let newRooms = {
     roomName: " ",
@@ -271,7 +271,7 @@ const EditDeleteProperty = (props) => {
             placeholder="section name"
             onChange={(e) => {
               newSection.sectionName = e.target.value;
-              newSection.sectionsRooms = [];
+              newSection.sectionRooms = [];
             }}
           />
           <button

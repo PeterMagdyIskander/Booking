@@ -1,26 +1,27 @@
 import { useState } from "react";
 import Modal from "react-modal";
 import { connect } from "react-redux";
-import db from '../utils/firebaseDB'
+import db from "../utils/firebaseDB";
 const AddPropertyPage = (props) => {
   Modal.setAppElement("#root");
-  const {authedUser}=props;
-  const id=generatePropertyID();
+  const { authedUser } = props;
+  const id = generatePropertyID();
   let propertyBlueprint = {
     owner: authedUser.id,
     id: id,
     name: "",
     sections: [],
     halls: [],
-    Location: "",
+    location: "",
     website: "",
-    reservations:[]
+    reservations: [],
   };
   const [property, setProperty] = useState(propertyBlueprint);
   const [propertyName, setPropertyName] = useState("");
   const [propertyLocation, setPropertyLocation] = useState("");
   const [propertyWebsite, setPropertyWebsite] = useState("");
-  const [sectionAddRoomsModalIsOpen, setSectionAddRoomsIsOpen] = useState(false);
+  const [sectionAddRoomsModalIsOpen, setSectionAddRoomsIsOpen] =
+    useState(false);
   const [addSectionModalIsOpen, addSectionIsOpen] = useState(false);
   const [place, setPlace] = useState("please add a section");
   const [placeModal, setPlaceModal] = useState(place);
@@ -51,7 +52,7 @@ const AddPropertyPage = (props) => {
       case "addSection":
         addSectionIsOpen(true);
         break;
-        case "hall":
+      case "hall":
         setHallIsOpen(true);
         break;
       default:
@@ -66,7 +67,7 @@ const AddPropertyPage = (props) => {
       case "addSection":
         addSectionIsOpen(false);
         break;
-        case "hall":
+      case "hall":
         setHallIsOpen(false);
         break;
       default:
@@ -74,14 +75,19 @@ const AddPropertyPage = (props) => {
     }
   }
 
-  function generatePropertyID () {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+  function generatePropertyID() {
+    return (
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15)
+    );
   }
 
-  async function sendToApi(property){
-    db.collection('Properties').doc(id).set(property);
-    let newPropertyIds=[...authedUser.propertyIds,id]
-    db.collection('Users').doc(authedUser.id).update({propertyIds:newPropertyIds});
+  async function sendToApi(property) {
+    db.collection("Properties").doc(id).set(property);
+    let newPropertyIds = [...authedUser.propertyIds, id];
+    db.collection("Users")
+      .doc(authedUser.id)
+      .update({ propertyIds: newPropertyIds });
   }
 
   let prop = property;
@@ -100,179 +106,195 @@ const AddPropertyPage = (props) => {
   };
   return (
     <div>
-      <h1>add property</h1>
-      <p> property name : {propertyName}</p>
-      <input
-        placeholder="enter the property name you want"
-        onChange={(e) => {
-          setPropertyName(e.target.value);
-          
-        }}
-      />
-
-      <p> property location : {propertyLocation}</p>
-      <input
-        placeholder="enter the property name you want"
-        onChange={(e) => {
-          setPropertyLocation(e.target.value);
-          
-        }}
-      />
-
-      <p> property website : {propertyWebsite}</p>
-      <input
-        placeholder="enter the property name you want"
-        onChange={(e) => {
-          setPropertyWebsite(e.target.value);
-          
-        }}
-      />
-    <br/>
-      <button onClick={() => openModal("addSection")}> add a section </button>
-      <Modal
-        isOpen={addSectionModalIsOpen}
-        onRequestClose={() => closeModal("addSection")}
-      >
+      <div>
+        <h1>add property</h1>
+        <p> property name : {propertyName}</p>
         <input
-          placeholder="section name"
+          placeholder="enter the property name you want"
           onChange={(e) => {
-            newSection.sectionName = e.target.value;
-            newSection.sectionsRooms = [];
+            setPropertyName(e.target.value);
           }}
         />
-        <button
-          onClick={() => {
-            setPlace(newSection.sectionName);
-            setPlaceModal(newSection.sectionName)
-            prop.name=propertyName;
-            prop.Location=propertyLocation;
-            prop.website=propertyWebsite;
-            prop.sections.push(newSection);
-            setProperty(prop);
-            console.log("prop after adding ection", property);
-            closeModal("addSection");
+      </div>
+      <div>
+        <p> property location : {propertyLocation}</p>
+        <input
+          placeholder="enter the property name you want"
+          onChange={(e) => {
+            setPropertyLocation(e.target.value);
           }}
+        />
+      </div>
+      <div>
+        <p> property website : {propertyWebsite}</p>
+        <input
+          placeholder="enter the property name you want"
+          onChange={(e) => {
+            setPropertyWebsite(e.target.value);
+          }}
+        />
+      </div>
+      <br />
+      <div>
+        <button onClick={() => openModal("addSection")}> add a section </button>
+        <Modal
+          isOpen={addSectionModalIsOpen}
+          onRequestClose={() => closeModal("addSection")}
         >
-          done
-        </button>
+          <input
+            placeholder="section name"
+            onChange={(e) => {
+              newSection.sectionName = e.target.value;
+              newSection.sectionRooms = [];
+            }}
+          />
+          <button
+            onClick={() => {
+              setPlace(newSection.sectionName);
+              setPlaceModal(newSection.sectionName);
+              prop.name = propertyName;
+              prop.Location = propertyLocation;
+              prop.website = propertyWebsite;
+              prop.sections.push(newSection);
+              setProperty(prop);
+              closeModal("addSection");
+            }}
+          >
+            done
+          </button>
+          <button
+            onClick={() => {
+              closeModal("addSection");
+            }}
+          >
+            {" "}
+            close{" "}
+          </button>
+        </Modal>
+      </div>
+      <div>
         <button
-          onClick={() => {
-            closeModal("addSection");
-          }}
+          disabled={place === "please add a section"}
+          onClick={() => openModal("sectionAddRooms")}
         >
           {" "}
-          close{" "}
+          Add Rooms to a section
         </button>
-      </Modal>
+        <Modal
+          isOpen={sectionAddRoomsModalIsOpen}
+          onRequestClose={() => closeModal("sectionAddRooms")}
+        >
+          <select value={placeModal} onChange={handlePlaceModalChange}>
+            {property.sections.map((section) => {
+              return (
+                <option key={section.sectionName} value={section.sectionName}>
+                  {section.sectionName}{" "}
+                </option>
+              );
+            })}
+          </select>
+
+          <input
+            placeholder="room name"
+            onChange={(e) => {
+              newRooms.roomName = e.target.value;
+            }}
+          />
+          <br />
+          <input
+            placeholder="room capacity"
+            onChange={(e) => {
+              newRooms.capacity = e.target.value;
+            }}
+          />
+          <br />
+          <input
+            placeholder="number of rooms"
+            onChange={(e) => {
+              newRooms.numberOfRooms = e.target.value;
+            }}
+          />
+
+          <br />
+          <button
+            onClick={() => {
+              prop.sections[getIndex(placeModal, prop, true)].sectionRooms.push(
+                newRooms
+              );
+              setProperty(prop);
+              closeModal("sectionAddRooms");
+            }}
+          >
+            Done
+          </button>
+          <button
+            onClick={() => {
+              closeModal("sectionAddRooms");
+            }}
+          >
+            {" "}
+            close{" "}
+          </button>
+        </Modal>
+      </div>
+      <br />
+      <div>
+        <button onClick={() => openModal("hall")}> Add hall </button>
+        <Modal
+          isOpen={hallModalIsOpen}
+          onRequestClose={() => closeModal("hall")}
+        >
+          <input
+            placeholder="hall name"
+            onChange={(e) => {
+              newHall.hallName = e.target.value;
+            }}
+          />
+          <br />
+          <input
+            onChange={(e) => {
+              newHall.hallCapacity = e.target.value;
+            }}
+          />
+          <br />
+
+          <button
+            onClick={() => {
+              prop.halls.push(newHall);
+              setProperty(prop);
+              closeModal("hall");
+            }}
+          >
+            Done
+          </button>
+          <button
+            onClick={() => {
+              closeModal("hall");
+            }}
+          >
+            {" "}
+            close{" "}
+          </button>
+        </Modal>
+      </div>
+      <br />
+      <div>
       <button
-        disabled={place === "please add a section"}
-        onClick={() => openModal("sectionAddRooms")}
+        onClick={() => {
+          sendToApi(property);
+        }}
       >
-        {" "}
-        Add Rooms to a section
+        Add Property
       </button>
-      <Modal
-        isOpen={sectionAddRoomsModalIsOpen}
-        onRequestClose={() => closeModal("sectionAddRooms")}
-      >
-        <select value={placeModal} onChange={handlePlaceModalChange}>
-          {property.sections.map((section) => {
-            return (
-              <option key={section.sectionName} value={section.sectionName}>
-                {section.sectionName}{" "}
-              </option>
-            );
-          })}
-        </select>
-
-        <input
-          placeholder="room name"
-          onChange={(e) => {
-            newRooms.roomName = e.target.value;
-          }}
-        />
-        <br />
-        <input
-          placeholder="room capacity"
-          onChange={(e) => {
-            newRooms.capacity = e.target.value;
-          }}
-        />
-        <br />
-        <input
-          placeholder="number of rooms"
-          onChange={(e) => {
-            newRooms.numberOfRooms = e.target.value;
-          }}
-        />
-
-        <br />
-        <button
-          onClick={() => {
-            prop.sections[
-              getIndex(placeModal, prop, true)
-            ].sectionsRooms.push(newRooms);
-            setProperty(prop);
-            closeModal("sectionAddRooms");
-          }}
-        >
-          Done
-        </button>
-        <button
-          onClick={() => {
-            console.log("prop", propertyBlueprint);
-            closeModal("sectionAddRooms");
-          }}
-        >
-          {" "}
-          close{" "}
-        </button>
-      </Modal>
-          <br/>
-      <button onClick={() => openModal("hall")}> Add hall </button>
-      <Modal isOpen={hallModalIsOpen} onRequestClose={() => closeModal("hall")}>
-        <input
-          placeholder="hall name"
-          onChange={(e) => {
-            newHall.hallName = e.target.value;
-          }}
-        />
-        <br />
-        <input
-          onChange={(e) => {
-            newHall.hallCapacity = e.target.value;
-          }}
-        />
-        <br />
-
-        <button
-          onClick={() => {
-            prop.halls.push(newHall);
-            setProperty(prop);
-            closeModal("hall");
-          }}
-        >
-          Done
-        </button>
-        <button
-          onClick={() => {
-            closeModal("hall");
-          }}
-        >
-          {" "}
-          close{" "}
-        </button>
-      </Modal>
-
-      <br/>
-    <button onClick={()=>{sendToApi(property)}}>Add Property</button>
+      </div>
+      <div>{JSON.stringify(property)}</div>
     </div>
   );
 };
 
-function mapStateToProps({authedUser}){
-  return{
+function mapStateToProps({ authedUser }) {
+  return {
     authedUser,
-  }
+  };
 }
 export default connect(mapStateToProps)(AddPropertyPage);
